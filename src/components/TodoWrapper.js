@@ -9,7 +9,6 @@ export const TodoWrapper = () => {
 
   
   useEffect(() => {
-    // Load todos from local storage when the component mounts
     const storedTodos = JSON.parse(localStorage.getItem('todos')) || [];
     setTodos(storedTodos);
   }, []);
