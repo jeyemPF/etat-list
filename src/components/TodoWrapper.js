@@ -7,11 +7,18 @@ import { EditTodoForm } from './EditTodoForm';
 export const TodoWrapper = () => {
   const [todos, setTodos] = useState([]);
 
+  
   useEffect(() => {
-    const storedTodos = JSON.parse(localStorage.getItem('todos')) || [{ id: uuidv4(), task: 'Default Task', completed: false, isEditing: false }];
+    // Load todos from local storage when the component mounts
+    const storedTodos = JSON.parse(localStorage.getItem('todos')) || [];
     setTodos(storedTodos);
   }, []);
-  
+
+  const modifyTodosAndLocalStorage = (newTodos) => {
+    setTodos(newTodos);
+    localStorage.setItem('todos', JSON.stringify(newTodos));
+  };
+
 
   const addTodo = (todo) => {
     setTodos([...todos, { id: uuidv4(), task: todo, completed: false, isEditing: false }]);
@@ -31,12 +38,12 @@ export const TodoWrapper = () => {
   };
 
   const editTask = (newTask, id) => {
-    setTodos(
-      todos.map((todo) =>
-        todo.id === id ? { ...todo, task: newTask, isEditing: !todo.isEditing } : todo
-      )
+    const newTodos = todos.map((todo) =>
+      todo.id === id ? { ...todo, task: newTask, isEditing: !todo.isEditing } : todo
     );
+    modifyTodosAndLocalStorage(newTodos);
   };
+  
 
   return (
     <div className='TodoWrapper'>
